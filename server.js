@@ -20,7 +20,12 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error('Erreur MongoDB :', err));
 
 // 🧱 Middlewares
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:4200',
+    'https://mesfilms-frontend-pi.vercel.app'
+  ]
+}));
 app.use(express.json());
 
 // 📁 Servir les images statiques
