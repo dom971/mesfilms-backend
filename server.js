@@ -11,6 +11,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const https = require('https');
 
 const app = express();
 
@@ -44,4 +45,13 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur port ${PORT}`);
+
+  // ⏰ Keep-alive
+  setInterval(() => {
+    https.get('https://mesfilms-backend.onrender.com', (res) => {
+      console.log('Keep-alive ping :', res.statusCode);
+    }).on('error', (err) => {
+      console.error('Keep-alive erreur :', err.message);
+    });
+  }, 10 * 60 * 1000); // toutes les 10 minutes
 });
