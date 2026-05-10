@@ -29,22 +29,27 @@ router.post('/register', async (req, res) => {
     // Envoyer l'email de validation
     const lienValidation = `https://mesfilms-backend.onrender.com/auth/verify/${verificationToken}`;
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: '🎬 MesFilms - Validez votre compte',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; background: #141414; color: #fff; padding: 30px; border-radius: 12px;">
-          <h1 style="color: #e50914; text-align: center;">🎬 MES FILMS</h1>
-          <h2 style="text-align: center;">Bonjour ${nom} !</h2>
-          <p style="text-align: center; color: #888;">Cliquez sur le bouton ci-dessous pour valider votre compte.</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${lienValidation}" style="background-color: #e50914; color: #fff; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: bold;">Valider mon compte</a>
+    try {
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: '🎬 MesFilms - Validez votre compte',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; background: #141414; color: #fff; padding: 30px; border-radius: 12px;">
+            <h1 style="color: #e50914; text-align: center;">🎬 MES FILMS</h1>
+            <h2 style="text-align: center;">Bonjour ${nom} !</h2>
+            <p style="text-align: center; color: #888;">Cliquez sur le bouton ci-dessous pour valider votre compte.</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${lienValidation}" style="background-color: #e50914; color: #fff; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: bold;">Valider mon compte</a>
+            </div>
+            <p style="text-align: center; color: #888; font-size: 12px;">Ce lien expire dans 24h.</p>
           </div>
-          <p style="text-align: center; color: #888; font-size: 12px;">Ce lien expire dans 24h.</p>
-        </div>
-      `
-    });
+        `
+      });
+      console.log('Email envoyé à :', email);
+    } catch (emailErr) {
+      console.error('Erreur envoi email :', emailErr.message);
+    }
 
     res.json({ message: 'Inscription réussie ! Vérifiez votre email.' });
   } catch (err) {
