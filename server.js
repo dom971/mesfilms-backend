@@ -32,6 +32,9 @@ app.use(express.json());
 // 📁 Servir les images statiques
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
+// 🔐 Routes Auth
+app.use('/auth', require('./routes/auth'));
+
 // 🎬 Routes API
 app.use('/films', require('./routes/films'));
 
